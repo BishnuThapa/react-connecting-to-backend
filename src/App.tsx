@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
       .then((res) => {
         setUsers(res.data);
         setLoading(false);
@@ -26,9 +26,17 @@ function App() {
 
   const deleteUser = (user: User) => {
     // const originalUsers = [...users]; to display all users if delete failed
+    const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
-    axios.delete("https://jsonplaceholder.typicode.com/users" + user.id);
+    axios
+      .delete("https://jsonplaceholder.typicode.com/xusers" + user.id)
+      .catch((err) => {
+        setError(err.message);
+        // if failed to delete set original list
+        setUsers(originalUsers);
+      });
   };
+
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
