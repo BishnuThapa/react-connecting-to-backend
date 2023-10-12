@@ -8,10 +8,12 @@ interface User {
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState("");
   useEffect(() => {
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users")
-      .then((res) => setUsers(res.data));
+      .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
+      .then((res) => setUsers(res.data))
+      .catch((err) => setError(err.message));
   }, []);
 
   const deleteUser = (user: User) => {
@@ -21,6 +23,7 @@ function App() {
   };
   return (
     <>
+      {error && <p className="text-danger">{error}</p>}
       <ul className="list-group">
         {users.map((user) => (
           <li
